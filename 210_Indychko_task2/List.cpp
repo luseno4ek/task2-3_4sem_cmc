@@ -73,13 +73,9 @@ template <typename Type>
 void List<Type>::Print() const {
     ListNode<Type>* current = ListHead;
     for(int i = 0; i < CurrentSize; i++) {
-        9
-    }
-    while(current != nullptr) {
         ListNode<Type> temp = *current;
-        std::cout << pos << ": " << temp.data << std::endl;
+        std::cout << i << ": " << temp.data << std::endl;
         current = temp.next;
-        pos++;
     }
 }
 
