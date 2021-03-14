@@ -25,17 +25,17 @@ public:
     List();
     List(const List& _list);
     ~List();
-    void PushFront(const Type& _data);
-    void PushBack(const Type& _data);
-    const Type& Front() const;
-    const Type& Back() const;
-    void PopFront();
-    void PopBack();
-    void Insert(int p, const Type& _data);
-    void Erase(int p);
-    bool Empty() const;
-    int Size() const;
-    void Print() const;
+    void PushFront(const Type& _data);     ///Pushing one element to the front
+    void PushBack(const Type& _data);      ///Pushing one element to the back
+    const Type& Front() const;             ///Reading one element from the front
+    const Type& Back() const;              ///Reading one element from the back
+    void PopFront();                       ///Erasing one element from the front
+    void PopBack();                        ///Erasing one element from the back
+    void Insert(int p, const Type& _data); ///Inserting element before the position p
+    void Erase(int p);                     ///Erasing element from the position p
+    bool Empty() const;                    ///Checking if List is empty
+    int Size() const;                      ///Getting List size
+    void Print() const;                    ///Printing the List
 };
 
 #endif

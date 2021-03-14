@@ -55,6 +55,7 @@ List<Type>::~List() {
 
 template <typename Type>
 void List<Type>::PushFront(const Type& _data) {
+///Changing ListHead to new ListNode with _data
     ListHead = new ListNode<Type>(_data, ListHead);
     if(ListHead->next != nullptr) {
         ListHead->next->previous = ListHead;
@@ -66,6 +67,7 @@ void List<Type>::PushFront(const Type& _data) {
 
 template <typename Type>
 void List<Type>::PushBack(const Type& _data) {
+///Changing ListTail to new ListNode with _data
     ListTail = new ListNode<Type>(_data, nullptr, ListTail);
     if(ListHead == nullptr) {
         ListHead = ListTail;
@@ -91,6 +93,7 @@ void List<Type>::Print() const {
 
 template <typename Type>
 const Type& List<Type>::Front() const {
+///Returning data from ListHead, if empty - ERROR
     if(ListHead == nullptr) {
         std::cout << "///ERROR/// : The list is empty!" << std::endl;
         return -1;
@@ -100,6 +103,7 @@ const Type& List<Type>::Front() const {
 
 template <typename Type>
 const Type& List<Type>::Back() const {
+///Returning data from ListTail, if empty - ERROR
     if(ListHead == nullptr) {
         std::cout << "///ERROR/// : The list is empty!" << std::endl;
         return -1;
@@ -109,6 +113,7 @@ const Type& List<Type>::Back() const {
 
 template <typename Type>
 void List<Type>::PopFront() {
+///Erasing the first element, if empty - ERROR
     if(ListHead == nullptr) {
         std::cout << "///ERROR/// : The list is empty!" << std::endl;
         return;
@@ -121,6 +126,7 @@ void List<Type>::PopFront() {
 
 template <typename Type>
 void List<Type>::PopBack() {
+///Erasing the last element, if empty - ERROR
     if(ListHead == nullptr) {
         std::cout << "///ERROR/// : The list is empty!" << std::endl;
         return;
@@ -139,6 +145,7 @@ void List<Type>::PopBack() {
 
 template <typename Type>
 void List<Type>::Insert(int p, const Type& _data) {
+///Inserting element before p-position if p <= CurrentSize
     if(p > CurrentSize) {
         std::cout << "///ERROR/// : The pos doesn't exist!" << std::endl;
         return;
@@ -164,6 +171,7 @@ void List<Type>::Insert(int p, const Type& _data) {
 
 template <typename Type>
 void List<Type>::Erase(int p) {
+///Deleting element from p-position if p < CurrentSize
     if(p >= CurrentSize) {
         std::cout << "///ERROR/// : The pos doesn't exist!" << std::endl;
         return;
