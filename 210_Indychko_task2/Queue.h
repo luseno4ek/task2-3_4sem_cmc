@@ -16,7 +16,6 @@ template <typename Type>
 class Queue : protected List<Type> {
 private:
     const int MaxSize;
-    int CurrentSize;
 public:
     static int TotalSize;
     Queue();

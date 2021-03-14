@@ -2,43 +2,51 @@
 #include "Queue.h"
 #include <iostream>
 
+const int MAXSIZE = 4;
+
 template <typename Type>
 Queue<Type>::Queue()
-    : CurrentSize(0), MaxSize(4) {
-        this->ListHead = nullptr;
+    : MaxSize(MAXSIZE)
+{
+    this->CurrentSize = 0;
+    this->ListHead = this-> ListTail = nullptr;
 }
 
 template <typename Type>
 Queue<Type>::Queue(const Type& _data)
-    : CurrentSize(1), MaxSize(4)
+    : MaxSize(MAXSIZE)
 {
-    this->ListHead = new ListNode<Type>(_data);
+    this->CurrentSize = 1;
+    this->ListHead = this->ListTail = new ListNode<Type>(_data);
     TotalSize++;
 }
 
 template <typename Type>
 Queue<Type>::Queue(const Queue& _queue)
-    : CurrentSize(_queue.CurrentSize), MaxSize(4)
+    : MaxSize(MAXSIZE)
 {
     ListNode<Type>* temp = _queue.ListHead;
     ListNode<Type>* head = new ListNode<Type>(*temp);
     temp = temp->next;
     ListNode<Type>* current = head;
+    ListNode<Type>* previous = head;
     while(temp != nullptr) {
         current->next = new ListNode<Type>(*temp);
         current = current->next;
+        current->previous = previous;
+        previous = previous -> next;
         temp = temp->next;
     }
-    current->next = nullptr;
     this->ListHead = head;
-    TotalSize += CurrentSize;
+    this->ListTail = current;
+    this->CurrentSize = _queue.CurrentSize;
 }
 
 template <typename Type>
-Queue<Type>::~Queue() { TotalSize -= CurrentSize; }
+Queue<Type>::~Queue() { TotalSize -= this->CurrentSize; }
 
 template <typename Type>
-int Queue<Type>::Size() const { return CurrentSize; }
+int Queue<Type>::Size() const { return this->CurrentSize; }
 
 template <typename Type>
 void Queue<Type>::Back(const Type &_data) {
@@ -47,7 +55,6 @@ void Queue<Type>::Back(const Type &_data) {
         return;
     }
     List<Type>::PushBack(_data);
-    CurrentSize++;
     TotalSize++;
 }
 
@@ -60,7 +67,9 @@ const Type& Queue<Type>::Front() const { return List<Type>::Front(); }
 template <typename Type>
 void Queue<Type>::Pop() {
     List<Type>::PopFront();
-    CurrentSize--;
+    if(Empty()) {
+        return;
+    }
     TotalSize--;
 }
 
@@ -68,4 +77,4 @@ template <typename Type>
 bool Queue<Type>::Empty() const { return List<Type>::Empty(); }
 
 template <typename Type>
-bool Queue<Type>::Full() const { return CurrentSize == MaxSize; }
+bool Queue<Type>::Full() const { return this->CurrentSize == MaxSize; }

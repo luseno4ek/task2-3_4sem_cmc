@@ -67,10 +67,20 @@ void List<Type>::PushFront(const Type& _data) {
 template <typename Type>
 void List<Type>::PushBack(const Type& _data) {
     ListTail = new ListNode<Type>(_data, nullptr, ListTail);
+    if(ListHead == nullptr) {
+        ListHead = ListTail;
+        return;
+    }
+    ListTail->previous->next = ListTail;
+    CurrentSize++;
 }
 
 template <typename Type>
 void List<Type>::Print() const {
+    if(Empty()) {
+        std::cout << "///ERROR/// : The list is empty!" << std::endl;
+        return;
+    }
     ListNode<Type>* current = ListHead;
     for(int i = 0; i < CurrentSize; i++) {
         ListNode<Type> temp = *current;
@@ -80,78 +90,101 @@ void List<Type>::Print() const {
 }
 
 template <typename Type>
-const Type& List<Type>::Front() const { return ListHead->data; }
+const Type& List<Type>::Front() const {
+    if(ListHead == nullptr) {
+        std::cout << "///ERROR/// : The list is empty!" << std::endl;
+        return -1;
+    }
+    return ListHead->data;
+}
 
 template <typename Type>
 const Type& List<Type>::Back() const {
-    ListNode<Type>* current = ListHead;
-    while(current->next != nullptr) {
-        current = current->next;
+    if(ListHead == nullptr) {
+        std::cout << "///ERROR/// : The list is empty!" << std::endl;
+        return -1;
     }
-    return current->data;
+    return ListTail->data;
 }
 
 template <typename Type>
 void List<Type>::PopFront() {
+    if(ListHead == nullptr) {
+        std::cout << "///ERROR/// : The list is empty!" << std::endl;
+        return;
+    }
     ListNode<Type>* current = ListHead;
-    ListHead = current->next;
+    ListHead = current->next; // we had only one elem => ListHead == nullptr
+    CurrentSize--;
     delete current;
 }
 
 template <typename Type>
 void List<Type>::PopBack() {
-    ListNode<Type>* current = ListHead;
-    //what if ListHead == nullptr?
-    while(current->next != nullptr) {
-        current = current->next;
+    if(ListHead == nullptr) {
+        std::cout << "///ERROR/// : The list is empty!" << std::endl;
+        return;
     }
-    ListNode<Type>* last = current->previous;
-    last->next = nullptr;
-    delete current;
+    ListNode<Type>* temp = ListTail;
+    ListNode<Type>* new_last = temp->previous;
+    if(new_last != nullptr) {
+        new_last->next = nullptr;
+        ListTail = new_last;
+    } else {
+        ListTail = ListHead = nullptr;
+    }
+    CurrentSize--;
+    delete temp;
 }
 
 template <typename Type>
 void List<Type>::Insert(int p, const Type& _data) {
+    if(p > CurrentSize) {
+        std::cout << "///ERROR/// : The pos doesn't exist!" << std::endl;
+        return;
+    }
     if(p == 0) {
         PushFront(_data);
         return;
     }
-    int pos = 0;
-    //TODO:fix p > size
-    ListNode<Type>* current = ListHead;
-    while(pos != p) {
-        current = current->next;
-        pos++;
-    }
-    if(current == nullptr) {
+    if(p == CurrentSize) {
         PushBack(_data);
         return;
+    }
+    ListNode<Type>* current = ListHead;
+    while(p != 0) {
+        current = current->next;
+        p--;
     }
     ListNode<Type>* previous = current->previous;
     previous->next = new ListNode<Type>(_data, current, previous);
     current->previous = previous->next;
+    CurrentSize++;
 }
 
 template <typename Type>
 void List<Type>::Erase(int p) {
+    if(p >= CurrentSize) {
+        std::cout << "///ERROR/// : The pos doesn't exist!" << std::endl;
+        return;
+    }
     if(p == 0) {
         PopFront();
         return;
     }
-    int pos = 0;
-    ListNode<Type>* current = ListHead;
-    while(pos != p) {
-        current = current->next;
-        pos++;
-    }
-    if(current->next == nullptr) {
+    if(p == CurrentSize - 1) {
         PopBack();
         return;
     }
+    ListNode<Type>* current = ListHead;
+    while(p != 0) {
+        current = current->next;
+        p--;
+    }
     ListNode<Type>* previous = current->previous;
     previous->next = current->next;
-    //TODO: Angry noises
-    free(current);
+    CurrentSize--;
+    delete current;
 }
 
 template <typename Type>
@@ -163,16 +196,5 @@ bool List<Type>::Empty() const {
 }
 
 template <typename Type>
-int List<Type>::Size() const {
-    if(Empty()) {
-        return 0;
-    }
-    int size = 1;
-    ListNode<Type>* current = ListHead;
-    while(current->next != nullptr) {
-        size++;
-        current = current->next;
-    }
-    return size;
-}
+int List<Type>::Size() const { return CurrentSize; }
 

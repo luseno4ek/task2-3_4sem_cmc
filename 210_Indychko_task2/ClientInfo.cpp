@@ -3,13 +3,15 @@
 #include <iostream>
 
 ClientInfo::ClientInfo(const char* _surname, int _time)
-    : time(_time) {
+    : time(_time)
+{
     surname = new char[strlen(_surname)];
     strcpy(surname, _surname);
 }
 
 ClientInfo::ClientInfo(const ClientInfo& _client)
-    : time(_client.time) {
+    : time(_client.time)
+{
     surname = new char[strlen(_client.surname)];
     strcpy(surname, _client.surname);
 }
